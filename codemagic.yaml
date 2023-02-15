@@ -1,3 +1,14 @@
-workflows:
-  my-workflow:
-    instance_type: mac_pro
+scripts:
+  - name: Install Expo CLI and eject
+    script: |
+      yarn install
+      yarn global add expo-cli
+      expo eject
+  - name: Set Info.plist values
+    script: |
+      PLIST=$CM_BUILD_DIR/$XCODE_SCHEME/Info.plist
+      PLIST_BUDDY=/usr/libexec/PlistBuddy
+      $PLIST_BUDDY -c "Add :ITSAppUsesNonExemptEncryption bool false" $PLIST
+  - name: Install CocoaPods dependencies
+    script: |
+      cd ios && pod install
